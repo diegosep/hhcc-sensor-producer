@@ -218,5 +218,6 @@ while True:
             moisture=data['moisture'],
             conductivity=data['conductivity'],
             mac=data['mac'],
+            battery=data['battery'],
             timestamp=data['timestamp'],
             ))
