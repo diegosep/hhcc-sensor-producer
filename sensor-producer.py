@@ -15,6 +15,7 @@ from unidecode import unidecode
 from miflora.miflora_poller import MiFloraPoller, MI_BATTERY, MI_CONDUCTIVITY, MI_LIGHT, MI_MOISTURE, MI_TEMPERATURE
 from btlewrap import available_backends, BluepyBackend, GatttoolBackend, PygattBackend, BluetoothBackendException
 import sdnotify
+from google.cloud import pubsub_v1
 
 project_name = 'Xiaomi Mi Flora Plant Sensor MQTT Client/Daemon'
 project_url = 'https://github.com/ThomDietrich/miflora-mqtt-daemon'
@@ -26,6 +27,12 @@ parameters = OrderedDict([
     (MI_CONDUCTIVITY, dict(name="SoilConductivity", name_pretty='Soil Conductivity/Fertility', typeformat='%d', unit='µS/cm')),
     (MI_BATTERY, dict(name="Battery", name_pretty='Sensor Battery Level', typeformat='%d', unit='%', device_class="battery"))
 ])
+
+publisher = pubsub_v1.PublisherClient()
+topic_name = 'projects/{project_id}/topics/{topic}'.format(
+    project_id=os.getenv('GOOGLE_CLOUD_PROJECT'),
+    topic='my-topic',  # Set this to something appropriate.
+)
 
 if False:
     # will be caught by python 2.7 to be illegal syntax
@@ -205,3 +212,11 @@ while True:
         data['firmware'] = flora['firmware']
         print('Data for "{}": {}'.format(flora_name, json.dumps(data)))
         print()
+        publisher.publish(topic_name, '{light},{temperature},{moisture},{conductivity},{mac},{battery},{timestamp}'.format(
+            data['light'],
+            data['temperature'],
+            data['moisture'],
+            data['conductivity'],
+            data['mac'],
+            data['timestamp'],
+            ))
