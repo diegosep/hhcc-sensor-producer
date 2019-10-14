@@ -15,6 +15,30 @@ from miflora.miflora_poller import MiFloraPoller, MI_BATTERY, MI_CONDUCTIVITY, M
 from btlewrap import available_backends, BluepyBackend, GatttoolBackend, PygattBackend, BluetoothBackendException
 from google.cloud import pubsub_v1
 
+
+# Logging function
+def print_line(text, error = False, warning=False, sd_notify=False, console=True):
+    timestamp = strftime('%Y-%m-%d %H:%M:%S', localtime())
+    if console:
+        if error:
+            print(Fore.RED + Style.BRIGHT + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL, file=sys.stderr)
+        elif warning:
+            print(Fore.YELLOW + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL)
+        else:
+            print(Fore.GREEN + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL)
+    timestamp_sd = strftime('%b %d %H:%M:%S', localtime())
+
+# Identifier cleanup
+def clean_identifier(name):
+    clean = name.strip()
+    for this, that in [[' ', '-'], ['ä', 'ae'], ['Ä', 'Ae'], ['ö', 'oe'], ['Ö', 'Oe'], ['ü', 'ue'], ['Ü', 'Ue'], ['ß', 'ss']]:
+        clean = clean.replace(this, that)
+    clean = unidecode(clean)
+    return clean
+
+#####################################################################
+
+
 project_name = 'Mi Flora Plant Sensor Pub/Sub'
 
 parameters = OrderedDict([
@@ -55,26 +79,6 @@ sleep_period = 300
 miflora_cache_timeout = sleep_period - 1
 print_line('Configuration accepted', console=False, sd_notify=True)
 sleep_time = 10
-
-# Logging function
-def print_line(text, error = False, warning=False, sd_notify=False, console=True):
-    timestamp = strftime('%Y-%m-%d %H:%M:%S', localtime())
-    if console:
-        if error:
-            print(Fore.RED + Style.BRIGHT + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL, file=sys.stderr)
-        elif warning:
-            print(Fore.YELLOW + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL)
-        else:
-            print(Fore.GREEN + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL)
-    timestamp_sd = strftime('%b %d %H:%M:%S', localtime())
-
-# Identifier cleanup
-def clean_identifier(name):
-    clean = name.strip()
-    for this, that in [[' ', '-'], ['ä', 'ae'], ['Ä', 'Ae'], ['ö', 'oe'], ['Ö', 'Oe'], ['ü', 'ue'], ['Ü', 'Ue'], ['ß', 'ss']]:
-        clean = clean.replace(this, that)
-    clean = unidecode(clean)
-    return clean
 
 
 # Initialize Mi Flora sensors
