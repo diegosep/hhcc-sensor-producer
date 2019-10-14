@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import ssl
 import sys
 import re
 import json
@@ -16,7 +15,7 @@ from miflora.miflora_poller import MiFloraPoller, MI_BATTERY, MI_CONDUCTIVITY, M
 from btlewrap import available_backends, BluepyBackend, GatttoolBackend, PygattBackend, BluetoothBackendException
 from google.cloud import pubsub_v1
 
-project_name = 'Mi Flora Plant Sensor MQTT Client/Daemon'
+project_name = 'Mi Flora Plant Sensor Pub/Sub'
 
 parameters = OrderedDict([
     (MI_LIGHT, dict(name="LightIntensity", name_pretty='Sunlight Intensity', typeformat='%d', unit='lux', device_class="illuminance")),
@@ -39,11 +38,23 @@ parser.add_argument('--gen-openhab', help='generate openHAB items based on confi
 parser.add_argument('--config_dir', help='set directory where config.ini is located', default=sys.path[0])
 parse_args = parser.parse_args()
 
-# Intro
+# Setp-Up
 colorama_init()
 print(Fore.GREEN + Style.BRIGHT)
 print(project_name)
 print(Style.RESET_ALL)
+
+# Load configuration file
+config_dir = parse_args.config_dir
+
+config = ConfigParser(delimiters=('=', ))
+config.optionxform = str
+config.read([os.path.join(config_dir, 'config.ini.dist'), os.path.join(config_dir, 'config.ini')])
+used_adapter = 'hci0'
+sleep_period = 300
+miflora_cache_timeout = sleep_period - 1
+print_line('Configuration accepted', console=False, sd_notify=True)
+sleep_time = 10
 
 # Logging function
 def print_line(text, error = False, warning=False, sd_notify=False, console=True):
@@ -65,20 +76,6 @@ def clean_identifier(name):
     clean = unidecode(clean)
     return clean
 
-
-# Load configuration file
-config_dir = parse_args.config_dir
-
-config = ConfigParser(delimiters=('=', ))
-config.optionxform = str
-config.read([os.path.join(config_dir, 'config.ini.dist'), os.path.join(config_dir, 'config.ini')])
-
-used_adapter = 'hci0'
-
-sleep_period = 300
-miflora_cache_timeout = sleep_period - 1
-
-print_line('Configuration accepted', console=False, sd_notify=True)
 
 # Initialize Mi Flora sensors
 flores = OrderedDict()
@@ -161,8 +158,7 @@ while True:
         data['name_pretty'] = flora['name_pretty']
         data['mac'] = flora['mac']
         data['firmware'] = flora['firmware']
-        print('Data for "{}": {}'.format(flora_name, json.dumps(data)))
-        print()
+        print_line('Data for "{}": {}'.format(flora_name, json.dumps(data)))
         message='{light},{temperature},{moisture},{conductivity},{mac},{battery},{timestamp}'.format(
             light=data['light'],
             temperature=data['temperature'],
@@ -173,6 +169,7 @@ while True:
             timestamp=data['timestamp'],
             )
         publisher.publish(topic_name, bytes(message,'utf-8'))
-
+        print_line('Pushing to Pub/Sub')
         #Wait for the next push 
-        sleep(10)
+        print_line('Waiting for {}'.format(sleep_time))
+        sleep(sleep_time)
