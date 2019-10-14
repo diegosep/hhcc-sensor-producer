@@ -22,7 +22,7 @@ msgs=[]
 
 for address, name in list(devices.items()):
     try:	
-	if (name == "Flower mate" or name == "Flower care"):
+	if name == "Flower mate" or name == "Flower care":
 		topic= baseTopic + address.replace(':', '') + '/'
 		requester = GATTRequester(address, True)
 		#Read battery and firmware version attribute
@@ -41,14 +41,14 @@ for address, name in list(devices.items()):
 		msgs.append({'topic': topic + 'fertility', 'payload':fertility})
 		if (verbose):
 			print("name: {}, address: {}".format(name, address))
-			print "Battery level:",battery,"%"
-			print "Firmware version:",firmware
-			print "Light intensity:",sunlight,"lux"
-			print "Temperature:",temperature/10.," C"
-			print "Soil moisture:",moisture,"%"
-			print "Soil fertility:",fertility,"uS/cm"
+			print("Battery level:",battery,"%")
+			print ("Firmware version:",firmware)
+			print ("Light intensity:",sunlight,"lux")
+			print ("Temperature:",temperature/10.," C")
+			print ("Soil moisture:",moisture,"%")
+			print ("Soil fertility:",fertility,"uS/cm")
     except:
-        print "Error during reading:", sys.exc_info()[0]
+        print ("Error during reading:", sys.exc_info()[0])
 
 if (len(msgs) > 0):
 	#publish.multiple(msgs, hostname="localhost", port=1883, client_id="miflower", keepalive=60,will=None, auth=None, tls=None)
