@@ -212,7 +212,7 @@ while True:
         data['firmware'] = flora['firmware']
         print('Data for "{}": {}'.format(flora_name, json.dumps(data)))
         print()
-        publisher.publish(topic_name, '{light},{temperature},{moisture},{conductivity},{mac},{battery},{timestamp}'.format(
+        message='{light},{temperature},{moisture},{conductivity},{mac},{battery},{timestamp}'.format(
             light=data['light'],
             temperature=data['temperature'],
             moisture=data['moisture'],
@@ -220,4 +220,5 @@ while True:
             mac=data['mac'],
             battery=data['battery'],
             timestamp=data['timestamp'],
-            ))
+            )
+        publisher.publish(topic_name, bytearray(message))
