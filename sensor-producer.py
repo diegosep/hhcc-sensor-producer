@@ -6,7 +6,7 @@ from collections import OrderedDict
 from miflora.miflora_poller import MiFloraPoller, MI_BATTERY, MI_CONDUCTIVITY, MI_LIGHT, MI_MOISTURE, MI_TEMPERATURE
 from time import time, sleep, localtime, strftime
 from btlewrap import available_backends, BluetoothBackendException
-from btlewrap.gatttool import GatttoolBackend
+from btlewrap.bluepy import BluepyBackend
 from time import time, sleep, localtime, strftime
 from colorama import Fore, Back, Style
 from colorama import init as colorama_init
@@ -44,7 +44,7 @@ def all_procedure(mac=default_mac, delay=default_delay, device_name=default_devi
     flora = dict()
     print("Initializing Bluetooth connection")
     print(mac)
-    flora_poller = MiFloraPoller(mac=mac, backend=GatttoolBackend, cache_timeout=miflora_cache_timeout, retries=3, adapter=used_adapter)
+    flora_poller = MiFloraPoller(mac=mac, backend=BluepyBackend, cache_timeout=miflora_cache_timeout, retries=3, adapter=used_adapter)
     flora['poller'] = flora_poller
     flora['name_pretty'] = device_name
     flora['mac'] = flora_poller._mac
