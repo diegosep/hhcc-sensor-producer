@@ -213,10 +213,10 @@ while True:
         print('Data for "{}": {}'.format(flora_name, json.dumps(data)))
         print()
         publisher.publish(topic_name, '{light},{temperature},{moisture},{conductivity},{mac},{battery},{timestamp}'.format(
-            data['light'],
-            data['temperature'],
-            data['moisture'],
-            data['conductivity'],
-            data['mac'],
-            data['timestamp'],
+            light=data['light'],
+            temperature=data['temperature'],
+            moisture=data['moisture'],
+            conductivity=data['conductivity'],
+            mac=data['mac'],
+            timestamp=data['timestamp'],
             ))
