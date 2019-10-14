@@ -175,4 +175,4 @@ while True:
         publisher.publish(topic_name, bytes(message,'utf-8'))
 
         #Wait for the next push 
-        time.sleep(10)
+        sleep(10)
