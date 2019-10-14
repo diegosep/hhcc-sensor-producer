@@ -175,5 +175,5 @@ while True:
         publisher.publish(topic_name, bytes(message,'utf-8'))
         print_line('Pushing to Pub/Sub')
         #Wait for the next push 
-        print_line('Waiting for {}'.format(sleep_time))
+        print_line('Waiting for {} seconds'.format(sleep_time))
         sleep(sleep_time)

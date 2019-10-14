@@ -12,4 +12,4 @@ $ export GOOGLE_APPLICATION_CREDENTIALS=[FILE_NAME].json
 $ python3 sensor-producer.py
 ```
 
-Add sensors in `[Sensors]` section
+Add sensors in `[Sensors]` section in the file config.ini.dist
