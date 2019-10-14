@@ -1,12 +1,13 @@
 # Flora sensor Miflora
 
-Send information to pub/sub
+Send information to pub/sub from raspberry and HHCC plant sensor
 
-´´´
-./setp-up.sh
-export GOOGLE_CLOUD_PROJECT=PROJECT_ID
+```
+$ ./setp-up.sh
 
-export GOOGLE_APPLICATION_CREDENTIALS=[FILE_NAME].json
+$ export GOOGLE_CLOUD_PROJECT=PROJECT_ID
 
-python3 sensor-producer.py
-´´´
+$ export GOOGLE_APPLICATION_CREDENTIALS=[FILE_NAME].json
+
+$ python3 sensor-producer.py
+```
