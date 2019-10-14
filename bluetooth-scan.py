@@ -50,7 +50,7 @@ for address, name in list(devices.items()):
     except:
         print ("Error during reading:", sys.exc_info()[0])
 
-if (len(msgs) > 0):
+#if (len(msgs) > 0):
 	#publish.multiple(msgs, hostname="localhost", port=1883, client_id="miflower", keepalive=60,will=None, auth=None, tls=None)
-	for msg in msgs:
+#	for msg in msgs:
 		#publish.single(msg['topic'], payload=msg['payload'], hostname="localhost", port=1883, keepalive=60,will=None, auth=None, tls=None)
