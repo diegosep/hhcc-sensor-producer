@@ -221,4 +221,5 @@ while True:
             battery=data['battery'],
             timestamp=data['timestamp'],
             )
-        publisher.publish(topic_name, bytearray(message))
+        print ('Publising '.message)
+        publisher.publish(topic_name, bytearray(message,'utf-8'))
