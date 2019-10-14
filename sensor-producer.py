@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import ssl
+import time
 import sys
 import re
 import json
@@ -173,6 +174,7 @@ print_line('Initialization complete, starting MQTT publish loop', console=False,
 
 # Sensor data retrieval and publication
 while True:
+    time.sleep(10)
     for [flora_name, flora] in flores.items():
         data = dict()
         attempts = 2
