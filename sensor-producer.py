@@ -123,4 +123,4 @@ def print_line(text, error = False, warning=False, console=True):
             print(Fore.GREEN + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL)
 
 if __name__ == '__main__':
-    all_procedure(default_mac,default_delay)
+    all_procedure()
