@@ -32,12 +32,6 @@ colorama_init()
 daemon_enabled = True
 flores = OrderedDict()
 
-def print_help(ctx, param, value):
-    if value is False:
-        return
-    click.echo(ctx.get_help())
-    ctx.exit()
-
 def all_procedure(mac=default_mac, delay=default_delay, device_name=default_device_name, bootstrap_server=default_bootstrap_server, topic=default_topic):
 
     miflora_cache_timeout = delay - 1
