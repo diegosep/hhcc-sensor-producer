@@ -38,13 +38,6 @@ def print_help(ctx, param, value):
     click.echo(ctx.get_help())
     ctx.exit()
 
-@click.command()
-@click.option('--mac', help='mac address of your hhcc mi plant', type=click.STRING, required=False)
-@click.option('--delay', default=default_delay, help='sleep time between captures', type=int, required=False)
-@click.option('--device-name', help='device name', type=click.STRING, required=False)
-@click.option('--bootstrap-server', help='bootstrap server', type=click.STRING, required=False)
-@click.option('--topic', help='topic name', type=click.STRING, required=False)
-@click.option('--help', is_flag=True, expose_value=False, is_eager=False, callback=print_help, help="print help message")
 def all_procedure(mac=default_mac, delay=default_delay, device_name=default_device_name, bootstrap_server=default_bootstrap_server, topic=default_topic):
 
     miflora_cache_timeout = delay - 1
@@ -136,4 +129,4 @@ def print_line(text, error = False, warning=False, console=True):
             print(Fore.GREEN + '[{}] '.format(timestamp) + Style.RESET_ALL + '{}'.format(text) + Style.RESET_ALL)
 
 if __name__ == '__main__':
-    all_procedure()
+    all_procedure(default_mac,default_delay)
