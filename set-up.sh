@@ -5,3 +5,4 @@ pip3 install bluepy
 pip3 install btlewrap
 pip3 install miflora
 pip3 install PyBluez
+pip install gattlib

@@ -44,7 +44,7 @@ def all_procedure(mac=default_mac, delay=default_delay, device_name=default_devi
     flora = dict()
     print("Initializing Bluetooth connection")
     print(mac)
-    flora_poller = MiFloraPoller(mac=mac, backend=BluepyBackend, cache_timeout=miflora_cache_timeout, retries=3, adapter=used_adapter)
+    flora_poller = MiFloraPoller(mac=mac, backend=BluepyBackend, cache_timeout=miflora_cache_timeout)
     flora['poller'] = flora_poller
     flora['name_pretty'] = device_name
     flora['mac'] = flora_poller._mac
