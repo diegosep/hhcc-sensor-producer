@@ -2,18 +2,17 @@
 
 import sys
 import json
+import click
 from collections import OrderedDict
 from miflora.miflora_poller import MiFloraPoller, MI_BATTERY, MI_CONDUCTIVITY, MI_LIGHT, MI_MOISTURE, MI_TEMPERATURE
-from time import time, sleep, localtime, strftime
-from btlewrap import available_backends, BluetoothBackendException
-from btlewrap.bluepy import BluepyBackend
+from btlewrap import available_backends, BluepyBackend, GatttoolBackend, PygattBackend, BluetoothBackendException
 from time import time, sleep, localtime, strftime
 from colorama import Fore, Back, Style
 from colorama import init as colorama_init
 
 default_mac = "C4:7C:8D:6A:DA:D6"
 default_delay = 30
-default_device_name = 'Device Name'
+default_device_name = 'Flower Care'
 default_bootstrap_server = '127.0.0.1:9092'
 default_topic = 'chakra_raw_topic'
 
@@ -33,6 +32,19 @@ colorama_init()
 daemon_enabled = True
 flores = OrderedDict()
 
+def print_help(ctx, param, value):
+    if value is False:
+        return
+    click.echo(ctx.get_help())
+    ctx.exit()
+
+@click.command()
+@click.option('--mac', help='mac address of your xiomi mi plant', type=click.STRING, required=True)
+@click.option('--delay', default=default_delay, help=f'sleep time between captures (default: {default_delay})', type=int, required=True)
+@click.option('--device-name', help=f'device name (default: {default_device_name})', type=click.STRING, required=True)
+@click.option('--bootstrap-server', help='bootstrap server', type=click.STRING, required=True)
+@click.option('--topic', help='topic name', type=click.STRING, required=True)
+@click.option('--help', is_flag=True, expose_value=False, is_eager=False, callback=print_help, help="print help message")
 def all_procedure(mac=default_mac, delay=default_delay, device_name=default_device_name, bootstrap_server=default_bootstrap_server, topic=default_topic):
 
     miflora_cache_timeout = delay - 1
@@ -41,10 +53,9 @@ def all_procedure(mac=default_mac, delay=default_delay, device_name=default_devi
     delay = delay
     topic = topic
 
+
     flora = dict()
-    print("Initializing Bluetooth connection")
-    print(mac)
-    flora_poller = MiFloraPoller(mac=mac, backend=BluepyBackend, cache_timeout=miflora_cache_timeout)
+    flora_poller = MiFloraPoller(mac=mac, backend=GatttoolBackend, cache_timeout=miflora_cache_timeout, retries=3, adapter=used_adapter)
     flora['poller'] = flora_poller
     flora['name_pretty'] = device_name
     flora['mac'] = flora_poller._mac
