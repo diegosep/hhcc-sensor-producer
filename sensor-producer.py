@@ -40,8 +40,8 @@ def print_help(ctx, param, value):
 
 @click.command()
 @click.option('--mac', help='mac address of your hhcc mi plant', type=click.STRING, required=True)
-@click.option('--delay', default=default_delay, help=f'sleep time between captures (default: {default_delay})', type=int, required=True)
-@click.option('--device-name', help=f'device name (default: {default_device_name})', type=click.STRING, required=True)
+@click.option('--delay', default=default_delay, help='sleep time between captures', type=int, required=True)
+@click.option('--device-name', help='device name', type=click.STRING, required=True)
 @click.option('--bootstrap-server', help='bootstrap server', type=click.STRING, required=True)
 @click.option('--topic', help='topic name', type=click.STRING, required=True)
 @click.option('--help', is_flag=True, expose_value=False, is_eager=False, callback=print_help, help="print help message")
